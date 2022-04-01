@@ -10,29 +10,52 @@ use Illuminate\Support\Facades\Hash;
 
 class MainController extends Controller
 {
-    public function index(Request $request): View
+    private Request $request;
+
+    public function __construct(Request $request)
     {
-        return view('welcome');
+        $this->request = $request;
     }
 
-    public function register(Request $request): RedirectResponse
+    public function index(): View
     {
-        /** @var User $user */
-        $user = User::create([
-            'username' => $request->get('username'),
-            'password' => Hash::make($request->get('password'))
-        ]);
-        $user->information()->create([
-            'name'     => $request->get('name'),
-            'birthday' => $request->date('birthday')
-        ]);
+        return \view('home');
+    }
+
+    public function login(): View
+    {
+        return \view('auth.login');
+    }
+
+    public function register(): View
+    {
+        return \view('auth.register');
+    }
+
+    public function authorization(): RedirectResponse
+    {
+        $user = User::whereUsername($this->request->get('username'))->first();
+        if (!$user || !Hash::check($this->request->get('password'), $user->password)) {
+            \Session::flash('error', 'Вы ввели неправильный логин или пароль');
+            return redirect()->back();
+        }
+        \Auth::login($user);
         return to_route('home');
     }
 
-    public function profile(int $id)
+    public function registration(): RedirectResponse
     {
-        $user = User::where('id', $id)->first();
-        dd($user->information->birthday);
-        return \view('profile');
+        $user = User::create([
+            'username' => $this->request->get('username'),
+            'password' => Hash::make($this->request->get('password'))
+        ]);
+        \Auth::login($user);
+        return to_route('home');
+    }
+
+    public function logout(): RedirectResponse
+    {
+        \Auth::logout();
+        return to_route('auth.login');
     }
 }
