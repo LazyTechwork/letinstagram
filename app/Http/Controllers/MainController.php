@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class MainController extends Controller
@@ -57,5 +60,19 @@ class MainController extends Controller
     {
         \Auth::logout();
         return to_route('auth.login');
+    }
+
+    public function profile(): Factory|View|Application
+    {
+        /** @var User $user */
+        $user = User::whereId(Auth::id())->with('information')->first();
+        $posts = $user->posts()->latest()->paginate(20);
+        return \view('profile', compact('user', 'posts'));
+    }
+
+    public function profile_edit()
+    {
+        $user = User::whereId(Auth::id())->with('information')->first();
+        return \view('profile.edit', compact('user'));
     }
 }

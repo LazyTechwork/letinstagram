@@ -71,7 +71,7 @@
     </div>
 </nav>
 
-<div class="container w-full md:max-w-3xl mx-auto py-20">
+<div class="container w-full md:max-w-3xl mx-auto mt-10 py-20">
     @if(session('error'))
         <div class="w-full bg-red-700 text-white rounded-lg py-5 px-8 mb-10">
             {{ session('error') }}

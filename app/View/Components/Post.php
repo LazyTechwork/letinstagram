@@ -6,15 +6,13 @@ use Illuminate\View\Component;
 
 class Post extends Component
 {
+    public \App\Models\Post $post;
+
     /**
-     * Create a new component instance.
-     *
-     * @return void
+     * @param \App\Models\Post $post
      */
-    public function __construct()
-    {
-        //
-    }
+    public function __construct(\App\Models\Post $post) { $this->post = $post; }
+
 
     /**
      * Get the view / contents that represent the component.

@@ -13,9 +13,11 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/', [MainController::class, 'index'])->name('home');
+    Route::get('/', [PostController::class, 'index'])->name('home');
     Route::get('/logout', [MainController::class, 'logout'])->name('auth.logout');
-    Route::get('/profile', [MainController::class, 'index'])->name('profile');
+    Route::get('/profile', [MainController::class, 'profile'])->name('profile');
+    Route::get('/profile/edit', [MainController::class, 'profile_edit'])->name('profile.edit');
+    Route::post('/profile/edit', [MainController::class, 'profile_update'])->name('profile.update');
 
     Route::prefix('/posts')->name('posts.')->group(function () {
         Route::get('/upload', [PostController::class, 'create'])->name('create');

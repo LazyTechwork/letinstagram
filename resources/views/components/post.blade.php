@@ -3,13 +3,13 @@
     <div class="my-4 mx-5">
         <a href="#" class="border bg-red-500 px-5 py-2 text-white">Лайк</a>
         <p class="w-full my-3">
-            <b>username</b> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda consequatur eveniet
-            facere inventore molestiae neque nisi rem tenetur unde voluptas?
+            <x-post-comment author="{{ $post->owner->username }}" text="{{ $post->content }}"/>
         </p>
         <hr>
         <p class="w-full my-3">
-            <b>username</b> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda consequatur eveniet
-            facere inventore molestiae neque nisi rem tenetur unde voluptas?
+            @foreach($comments as $comment)
+                <x-post-comment author="{{ $comment->author->username }}" text="{{ $comment->text }}"></x-post-comment>
+            @endforeach
         </p>
     </div>
 </div>
